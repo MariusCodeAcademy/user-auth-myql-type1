@@ -7,6 +7,9 @@ const router = express.Router();
 const mysql = require('mysql2/promise');
 const dbConfig = require('../../dbConfig');
 
+const { hashValue } = require('../../utils/hashHelper');
+const { validateRegister } = require('../../utils/validateHelper');
+
 // GET /auth - gets all users from users table
 router.get('/', async (req, res) => {
   res.send('get all users');
@@ -17,21 +20,8 @@ router.post('/register', async (req, res) => {
   const { body } = req;
 
   // validate body using joi
-  const schema = joi.object({
-    email: joi.string().email().required(),
-    password: joi.string().min(6).required(),
-  });
-  try {
-    await schema.validateAsync(body, { abortEarly: false });
-  } catch (error) {
-    console.warn(error);
-    return res.status(400).send({
-      error: error.details.map((e) => ({
-        errorMsg: e.message,
-        field: e.context.key,
-      })),
-    });
-  }
+  const validateResult = await validateRegister(body, res);
+  if (validateResult === false) return;
   // export validate fn to external file
   try {
     const conn = await mysql.createConnection(dbConfig);
@@ -40,9 +30,10 @@ router.post('/register', async (req, res) => {
     VALUES ( ?, ? )
     `;
     // hash pass
-    const hashedPass = bcrypt.hashSync(body.password, 8);
-    console.log('hashedPass', hashedPass);
-    const result = await conn.execute(sql, [body.email, hashedPass]);
+    const result = await conn.execute(sql, [
+      body.email,
+      hashValue(body.password),
+    ]);
     res.send({ msg: 'user created', result });
     await conn.end();
   } catch (error) {
@@ -50,5 +41,7 @@ router.post('/register', async (req, res) => {
     res.status(500).send({ error: 'something went wrong' });
   }
 });
+
+// POST /auth/login - checks if user exists and if passswords match
 
 module.exports = router;
