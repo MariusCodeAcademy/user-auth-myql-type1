@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const joi = require('joi');
 
 const router = express.Router();
 
@@ -15,7 +16,23 @@ router.get('/', async (req, res) => {
 router.post('/register', async (req, res) => {
   const { body } = req;
 
-  // validate
+  // validate body using joi
+  const schema = joi.object({
+    email: joi.string().email().required(),
+    password: joi.string().min(6).required(),
+  });
+  try {
+    await schema.validateAsync(body, { abortEarly: false });
+  } catch (error) {
+    console.warn(error);
+    return res.status(400).send({
+      error: error.details.map((e) => ({
+        errorMsg: e.message,
+        field: e.context.key,
+      })),
+    });
+  }
+  // export validate fn to external file
   try {
     const conn = await mysql.createConnection(dbConfig);
     const sql = `
@@ -23,7 +40,7 @@ router.post('/register', async (req, res) => {
     VALUES ( ?, ? )
     `;
     // hash pass
-    const hashedPass = bcrypt.hashSync(body.password);
+    const hashedPass = bcrypt.hashSync(body.password, 8);
     console.log('hashedPass', hashedPass);
     const result = await conn.execute(sql, [body.email, hashedPass]);
     res.send({ msg: 'user created', result });
