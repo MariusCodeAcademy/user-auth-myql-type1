@@ -2,4 +2,4 @@
 
 ## install
 
-1. npm i express morgan cors mysql2 dotenv
+1. npm install
