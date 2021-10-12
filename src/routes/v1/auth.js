@@ -109,7 +109,7 @@ router.post('/login', async (req, res) => {
     if (bcrypt.compareSync(body.password, foundUser[0].password)) {
       const userToBeEncrypted = {
         email: foundUser[0].email,
-        userName: 'Some name',
+        userId: foundUser[0].id,
       };
       const token = jwt.sign(
         userToBeEncrypted,

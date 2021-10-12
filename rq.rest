@@ -11,7 +11,7 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "James@gmail.com",
+  "email": "Mike@Tyson.com",
   "password": "123456"
 }
 
@@ -19,3 +19,7 @@ Content-Type: application/json
 
 GET http://localhost:3000/auth/posts
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkphbWVzQGdtYWlsLmNvbSIsInVzZXJOYW1lIjoiU29tZSBuYW1lIiwiaWF0IjoxNjM0MDIwNDc2fQ.O3bZweZoNnx8EBT6Q9pCdz5Z_hnx-fi04-HbOM0mUS0
+
+###
+GET http://localhost:3000/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Ik1pa2VAVHlzb24uY29tIiwidXNlcklkIjoxOCwiaWF0IjoxNjM0MDI4OTgxLCJleHAiOjE2MzQwMzI1ODF9.xAZ3whG59ltQdifrquCUwUbUKcXJj56qMfK7HX8GBQM

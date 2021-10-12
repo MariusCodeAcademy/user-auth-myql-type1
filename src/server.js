@@ -7,6 +7,7 @@ const cors = require('cors');
 
 // routes
 const authRoutes = require('./routes/v1/auth');
+const postRoutes = require('./routes/v1/posts');
 
 const PORT = process.env.SERVER_PORT || 3000;
 
@@ -22,5 +23,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', authRoutes);
+app.use('/posts', postRoutes);
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
