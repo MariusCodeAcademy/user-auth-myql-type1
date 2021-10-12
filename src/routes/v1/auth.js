@@ -27,17 +27,37 @@ const posts = [
     user: 'Jane@gmail1.com',
     text: 'some text made by Jane@gmail1.com ',
   },
+  {
+    id: 4,
+    user: 'James@bond.com',
+    text: 'some text made by James Once more ',
+  },
 ];
 
 // middleware authenticateFn
 function authenticateToken(req, res, next) {
-  const token = '';
-  next();
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
+  console.log('token', token);
+  if (!token) return res.status(401).json({ error: 'unauthorized request' });
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
+    if (err) {
+      return res.status(403).json({ error: 'token expired/invalid' });
+    }
+    console.log('data in jwt', data);
+    req.user = data.email;
+    next();
+  });
 }
 
 // GET /auth/posts - gets all users from users table
 router.get('/posts', authenticateToken, async (req, res) => {
-  res.json({ headers: req.headers });
+  const userEmail = req.user;
+  res.json({
+    user: userEmail,
+    posts: posts.filter((p) => p.user === userEmail),
+  });
 });
 
 // POST /auth/register - creates new user with data in the body
@@ -94,6 +114,7 @@ router.post('/login', async (req, res) => {
       const token = jwt.sign(
         userToBeEncrypted,
         process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: '1h' },
       );
 
       // eslint-disable-next-line consistent-return

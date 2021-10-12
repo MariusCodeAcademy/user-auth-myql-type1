@@ -11,11 +11,11 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "James@bond.com",
+  "email": "James@gmail.com",
   "password": "123456"
 }
 
 ###
 
 GET http://localhost:3000/auth/posts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkphbWVzQGJvbmQuY29tIiwidXNlck5hbWUiOiJTb21lIG5hbWUiLCJpYXQiOjE2MzQwMTgwNjd9.pruTJmxPgk5dLS3v0s_3NU-40Bghv-iWF02Su8hY47Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkphbWVzQGdtYWlsLmNvbSIsInVzZXJOYW1lIjoiU29tZSBuYW1lIiwiaWF0IjoxNjM0MDIwNDc2fQ.O3bZweZoNnx8EBT6Q9pCdz5Z_hnx-fi04-HbOM0mUS0
