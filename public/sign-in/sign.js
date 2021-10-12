@@ -14,5 +14,9 @@ form.addEventListener('submit', async (e) => {
     body: JSON.stringify(Object.fromEntries(formData)),
   });
   const respInJs = await resp.json();
+  if (respInJs.msg === 'user found') {
+    localStorage.setItem('loggedInUserToken', respInJs.token);
+    localStorage.setItem('loggedInUserEmail', respInJs.foundUser);
+  }
   console.log('got back', respInJs);
 });
