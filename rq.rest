@@ -2,7 +2,7 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-  "email": "James@gmail.com",
+  "email": "James@bond.com",
   "password": "123456"
 }
 
@@ -11,6 +11,11 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "James@gmail.com",
+  "email": "James@bond.com",
   "password": "123456"
 }
+
+###
+
+GET http://localhost:3000/auth/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkphbWVzQGJvbmQuY29tIiwidXNlck5hbWUiOiJTb21lIG5hbWUiLCJpYXQiOjE2MzQwMTgwNjd9.pruTJmxPgk5dLS3v0s_3NU-40Bghv-iWF02Su8hY47Y

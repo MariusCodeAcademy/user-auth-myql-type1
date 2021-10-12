@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 // const joi = require('joi');
 
 const router = express.Router();
@@ -10,9 +11,33 @@ const dbConfig = require('../../dbConfig');
 const { hashValue } = require('../../utils/hashHelper');
 const { validateRegister } = require('../../utils/validateHelper');
 
-// GET /auth - gets all users from users table
-router.get('/', async (req, res) => {
-  res.send('get all users');
+const posts = [
+  {
+    id: 1,
+    user: 'James@bond.com',
+    text: 'some text made by James ',
+  },
+  {
+    id: 2,
+    user: 'Jane@gmail.com',
+    text: 'some text made by Jane ',
+  },
+  {
+    id: 3,
+    user: 'Jane@gmail1.com',
+    text: 'some text made by Jane@gmail1.com ',
+  },
+];
+
+// middleware authenticateFn
+function authenticateToken(req, res, next) {
+  const token = '';
+  next();
+}
+
+// GET /auth/posts - gets all users from users table
+router.get('/posts', authenticateToken, async (req, res) => {
+  res.json({ headers: req.headers });
 });
 
 // POST /auth/register - creates new user with data in the body
@@ -62,8 +87,21 @@ router.post('/login', async (req, res) => {
     }
     // if so, check if passwors match
     if (bcrypt.compareSync(body.password, foundUser[0].password)) {
+      const userToBeEncrypted = {
+        email: foundUser[0].email,
+        userName: 'Some name',
+      };
+      const token = jwt.sign(
+        userToBeEncrypted,
+        process.env.ACCESS_TOKEN_SECRET,
+      );
+
       // eslint-disable-next-line consistent-return
-      return res.send({ msg: 'user found', foundUser: foundUser[0].email });
+      return res.json({
+        msg: 'user found',
+        foundUser: foundUser[0].email,
+        token,
+      });
     }
     throw new Error('password do not match');
   } catch (error) {
