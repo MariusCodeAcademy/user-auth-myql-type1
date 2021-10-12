@@ -20,3 +20,5 @@ form.addEventListener('submit', async (e) => {
   }
   console.log('got back', respInJs);
 });
+
+console.log(localStorage.getItem('loggedInUserEmail'));
